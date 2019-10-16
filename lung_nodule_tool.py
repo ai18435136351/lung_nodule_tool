@@ -5,11 +5,13 @@ from PyQt5.QtWidgets import *
 from outline_gen import process
 from data_read import data_read
 from volume import volume_count, weight_count
+from maker import generate
+import os
 
-path_data = r'C:\Users\dell\Desktop\2019.5.6\data_all'
-path_mha_image = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\Cv2_image_mha'
-path_mhd_image = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\Cv2_image_mhd'
-path = r'C:\Users\dell\Desktop\2019.5.6\img_process\process'
+path_data = r'mha_mhd'
+path_mha_image = r'data_mha_mhd/mha_png'
+path_mhd_image = r'data_mha_mhd/mhd_png'
+path = r'img_process/process'
 
 
 class picture(QMainWindow):
@@ -25,9 +27,12 @@ class picture(QMainWindow):
         self.use_palette()
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('文件')
-        newAct = QAction('文件读取', self)
+        newAct = QAction('mha/mhd文件读取', self)
         newAct.triggered.connect(self.showDialog)
+        newAct0 = QAction('已生成文件读取', self)
+        newAct0.triggered.connect(self.showDialog1)
         fileMenu.addAction(newAct)
+        fileMenu.addAction(newAct0)
         menubar1 = self.menuBar()
         fileMenu = menubar1.addMenu('图片预测')
         newAct1 = QAction('图片读取', self)
@@ -124,20 +129,56 @@ class picture(QMainWindow):
         self.btn_vacuole.setText("最大直径计算")
         self.btn_vacuole.move(950, 60)
 
+        self.btn_generate = QPushButton(self)
+        self.btn_generate.setText("生成病历报告")
+        self.btn_generate.clicked.connect(lambda: generate())
+        self.btn_generate.move(780, 650)
 
     def showDialog(self):
 
         self.num1 += 1
         print('num1', self.num1)
         self.name_path, fname = QFileDialog.getOpenFileName(self, 'Open file', path_data)
-        print(str(self.name_path))
+        print('self.name_path =', str(self.name_path))
         self.name1, self.name, self.image_num = data_read(str(self.name_path))
+        print('self.name1 =', self.name1)
+        print('self.name =', self.name)
+        print('self.image_num =', self.image_num)
         print(self.name_path[len(self.name_path) - 4:len(self.name_path)])
         if self.name_path[len(self.name_path) - 4:len(self.name_path)] == '.mha':
             # print(self.name_path[len(self.name_path) - 4:len(self.name_path)])
             self.btn.clicked.connect(self.openimage_mha)
         else:
             self.btn.clicked.connect(self.openimage_mhd)
+
+    def showDialog1(self):
+        self.file_path, fname1 = QFileDialog.getOpenFileNames(self, path_mha_image)
+        self.image_num = len(self.file_path)
+        self.name1 = 'chenhui'
+        self.name = 'chenhui1'
+        self.btn.clicked.connect(self.openimage)
+
+    def openimage(self):
+        self.num = 0
+        self.total_num = len(self.file_path)
+        self.image_index = 0
+        self.type = 'mhd'
+        self.img_mhd = path_mhd_image + '.' + '/' + self.name1 + '.' + '/' + self.name + '.' + '/' + self.name1 + '0.png'
+        print(self.img_mhd)
+        img3 = QtGui.QPixmap(self.img_mhd).scaled(self.label.width(), self.label.height())
+        self.label.setPixmap(img3)
+        self.btn_next.clicked.connect(self.nextIOUI)
+        self.btn_last.clicked.connect(self.lastIOUI)
+
+    def get_next_image(self):
+        self.image_index = self.image_index + 1
+        img3 = QtGui.QPixmap(self.file_path[self.image_index]).scaled(self.label.width(), self.label.height())
+        self.label.setPixmap(img3)
+
+    def get_last_image(self):
+        self.image_index = self.image_index - 1
+        img3 = QtGui.QPixmap(self.file_path[self.image_index]).scaled(self.label.width(), self.label.height())
+        self.label.setPixmap(img3)
 
     def openimage_mha(self):
         # mha首位图片加载
@@ -210,20 +251,35 @@ class picture(QMainWindow):
     def mouse_click(self):          # 鼠标点击处理
 
         if self.type == 'mhd':
-            print(self.name1, self.name,self.name1 + str(self.num))
-            self.locationx = (self.x - 30) * 1024/700
-            self.locationy = (self.y - 100) *1024/700
-
-            print(self.locationx,self.locationy)
+            print(self.name1, self.name, self.name1 + str(self.num))
+            self.locationx = (self.x - 40) * 1024/700
+            self.locationy = (self.y - 120) * 1024/700
+            print(self.locationx, self.locationy)
+            print(self.locationx, self.locationy)
 
             self.acc = process(str(self.name1), str(self.name), str(self.name1 + str(self.num)), int(self.locationx), int(self.locationy))
             self.IOUimage = str(path + '.' + '/' + str(self.name1 + str(self.num)) + '.png')
-
+            print('IOUimage = ', self.IOUimage)
             jpg = QtGui.QPixmap(self.IOUimage).scaled(self.label.width(), self.label.height())
-            self.label.setPixmap(jpg)
             self.btn_IOU.clicked.connect(self.IOU)
             self.btn_volume.clicked.connect(self.Volume)    # 体积计算
             self.btn_weight.clicked.connect(self.Weight)    # 重量计算
+            self.btn_next.clicked.connect(self.nextIOUI)
+            self.btn_last.clicked.connect(self.lastIOUI)
+
+    def nextIOUI(self):
+        self.num = self.num + 1
+        self.IOUimage = str(path + '.' + str(self.name1 + str(self.num)) + '.png')
+        jpg = QtGui.QPixmap(self.IOUimage).scaled(self.label.width(), self.label.height())
+        self.btn_next.clicked.connect(self.nextIOUI)
+        self.btn_last.clicked.connect(self.lastIOUI)
+
+    def lastIOUI(self):
+        self.num = self.num - 1
+        self.IOUimage = str(path + '.' + '/' + str(self.name1 + str(self.num)) + '.png')
+        jpg = QtGui.QPixmap(self.IOUimage).scaled(self.label.width(), self.label.height())
+        self.btn_next.clicked.connect(self.nextIOUI)
+        self.btn_last.clicked.connect(self.lastIOUI)
 
     def IOU(self):                  # IOU值处理
         self.label_IOU.setText('IOU:' + str(self.acc))
@@ -242,7 +298,6 @@ class picture(QMainWindow):
         window_pale = QtGui.QPalette()
         window_pale.setBrush(self.backgroundRole(), QtGui.QBrush(QtGui.QPixmap("./image/main_skin_04.jpg")))
         self.setPalette(window_pale)
-
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

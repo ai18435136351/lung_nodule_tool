@@ -4,14 +4,14 @@ import cv2
 import SimpleITK as sitk
 import matplotlib.pyplot as plt
 
-# path = r'C:\Users\dell\Desktop\2019.5.6\data_all\chenhui/chenhui1.mhd'
+# path = r'D:\Python\lung_nodule_tool-master\mha_mhd/chenhui1.mhd'
 
-path_npy_mha = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\npy_mha'
-path_npy_mhd = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\npy_mhd'
+path_npy_mha = r'data_mha_mhd/mha_npy'
+path_npy_mhd = r'data_mha_mhd/mhd_npy'
 
-path_image_mha = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\Cv2_image_mha'
-path_image_mhd = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\Cv2_image_mhd'
-path_image_mhd1 = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\Cv2_image_mhd1'
+path_image_mha = r'data_mha_mhd/mha_png'
+path_image_mhd = r'data_mha_mhd/mhd_png'
+path_image_mhd1 = r'data_mha_mhd/mhd1_png'
 
 
 def data_read(path):
@@ -129,5 +129,5 @@ def data_mhd(path):
 
     return name1, name, len(image)
 
-# c, d , e =data_read(str("'" + 'C:/Users/dell/Desktop/2019.5.6/data_all/chenhui/chenhui1.mhd'))
+# c, d , e = data_read(path)
 # print(c, d, e)

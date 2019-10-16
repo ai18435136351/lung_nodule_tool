@@ -8,11 +8,11 @@ from outline_supple import filling_internel
 from IOU import acc
 import matplotlib.pyplot as plt
 
-# path = r'C:\Users\wzt\Desktop\2019.5.6\all_npy_and_image\Cv2_image_mhd\chenhui\chenhui1\chenhui0'
+# path = r'data_mha_mhd\mhd_png/chenhui/chenhui1/chenhui0'
 
-path_data_mhd = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\Cv2_image_mhd'
-path_data = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\Cv2_image_mhd1'
-path_mask = r'C:\Users\dell\Desktop\2019.5.6\all_npy_and_image\Cv2_image_mha'
+path_data_mhd = r'data_mha_mhd/mhd_png'
+path_data = r'data_mha_mhd/mhd1_png'
+path_mask = r'data_mha_mhd/mha_png'
 
 path_equlization = './img_process' + './hist_equalization'
 path_region_growth = './img_process' + './region_growth'
@@ -25,7 +25,7 @@ path_equal_slice_canny = './img_process' + './equal_slice_canny'
 path_slice_intrenel = './img_process' + './slice_intrenel'
 
 # path_data_npy = 'C:\Users\wzt\Desktop\2019.5.6\all_npy_and_image\npy_mha'
-path_npy_data = './all_npy_and_image' + './npy_mhd'
+path_npy_data = 'data_mha_mhd/mhd_npy'
 
 if not os.path.exists(path_equlization):
     os.makedirs(path_equlization)
@@ -116,9 +116,9 @@ def process(file1, file2, image_names, y, x):
     print(img.shape)
     equalization(file1, file2, image_names)
     img_equal = np.array(cv2.imread(path_equlization + '.' + '/' + image_names + '.png', 0))          # 均衡化二维
-
+    print(img_equal.shape)
     img_mask = np.array(cv2.imread(path_mask + '.' + '/' + file1 + '.' + '/' + file2 + '.' + '/' + image_names + '.png', 0))
-
+    print(img_mask.shape)
     # locationx = []
     # locationy = []
     #

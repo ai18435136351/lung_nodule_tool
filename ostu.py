@@ -3,6 +3,7 @@ import numpy as np
 
 x1 = 81
 
+
 def coincide(img1, img2):
     img3 = np.zeros((x1, x1))
     for i in range(x1):
@@ -10,6 +11,7 @@ def coincide(img1, img2):
             if img1[i][j] == img2[i][j]:
                 img3[i][j] = img1[i][j]
     return img3
+
 
 def ostu_process(path, img):
     for i in range(81):

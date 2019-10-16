@@ -6,7 +6,6 @@ name_mask = []
 for i in data_mask:
     name_mask.append(i[0])
 
-
 def volume_count(file1, file2, x, y):
     img_volume = 0
     for i in range(80):
