@@ -110,14 +110,18 @@ def equalization(file1, file2, image_names):              # 均衡化
     cv2.imwrite(path_equlization + '.' + '/' + image_names + '.png', img_equal1)
     return img_equal1
 
+
 def process(file1, file2, image_names, y, x):
     # print('处理过程')
-    img = np.array(cv2.imread(path_data + '.' + '/' + file1 + '.' + '/' + file2 + '.' + '/' + image_names + '.png', 0))  # 原图单层
+    img = np.array(cv2.imread(path_data + '.' + '/' + file1 + '.' + '/' + file2 + '.' + '/' + image_names + '.png', 0))
+    # img = np.array(cv2.imread(path_data + '/' + file1 + '/' + file2 + '/' + image_names + '.png', 0))  # 原图单层
     print(img.shape)
     equalization(file1, file2, image_names)
     img_equal = np.array(cv2.imread(path_equlization + '.' + '/' + image_names + '.png', 0))          # 均衡化二维
+    # img_equal = np.array(cv2.imread(path_equlization + '/' + image_names + '.png', 0))
     print(img_equal.shape)
     img_mask = np.array(cv2.imread(path_mask + '.' + '/' + file1 + '.' + '/' + file2 + '.' + '/' + image_names + '.png', 0))
+    # img_mask = np.array(cv2.imread(path_mask + '/' + file1 + '/' + file2 + '/' + image_names + '.png', 0))
     print(img_mask.shape)
     # locationx = []
     # locationy = []
