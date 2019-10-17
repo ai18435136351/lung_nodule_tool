@@ -167,6 +167,7 @@ class picture(QMainWindow):
         reply = QMessageBox.information(self, '提示', '读取成功，请点击“显示图片”以显示', QMessageBox.Yes)
         self.btn.clicked.connect(self.openimage)
 
+    # 显示打开处理完图片文件界面
     def showDialog2(self):
         self.file_path, fname1 = QFileDialog.getOpenFileNames(self, path_mha_image)
         self.image_num = len(self.file_path)
